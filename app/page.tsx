@@ -1,11 +1,12 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
+import HomepageViewTracker from "@/components/HomepageViewTracker";
 import events from "@/lib/constants";
 import Link from "next/link";
 export default function App(){
   return (<>
-  
-  <h1 className="text-center">The Hub for Every Dev <br /> Event You Can't Miss</h1>
+  <HomepageViewTracker />
+  <h1 className="text-center">The Hub for Every Dev <br /> Event You Can&apos;t Miss</h1>
             <p className="text-center mt-5">Hackathons, Meetups, and Conferences, All in One Place</p>
 
             <ExploreBtn />
