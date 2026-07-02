@@ -1,9 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-  },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    cacheComponents: true,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+            }
+        ]
+    },
   async rewrites() {
     return [
       {
@@ -11,15 +20,12 @@ const nextConfig: NextConfig = {
         destination: "https://us-assets.i.posthog.com/static/:path*",
       },
       {
-        source: "/ingest/array/:path*",
-        destination: "https://us-assets.i.posthog.com/array/:path*",
-      },
-      {
         source: "/ingest/:path*",
         destination: "https://us.i.posthog.com/:path*",
       },
     ];
   },
+  // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
 };
 
