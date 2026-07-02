@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
 
         if(!file) return NextResponse.json({ message: 'Image file is required'}, { status: 400 })
 
-        let tags = JSON.parse(formData.get('tags') as string);
-        let agenda = JSON.parse(formData.get('agenda') as string);
+    const tags = parseListField(formData.get('tags'));
+    const agenda = parseListField(formData.get('agenda'));
 
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -49,6 +49,33 @@ export async function POST(req: NextRequest) {
         console.error(e);
         return NextResponse.json({ message: 'Event Creation Failed', error: e instanceof Error ? e.message : 'Unknown'}, { status: 500 })
     }
+}
+
+function parseListField(value: FormDataEntryValue | null): string[] {
+    if (!value || typeof value !== 'string') {
+        return [];
+    }
+
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+        return [];
+    }
+
+    try {
+        const parsed = JSON.parse(trimmed);
+
+        if (Array.isArray(parsed)) {
+            return parsed.map((item) => String(item).trim()).filter(Boolean);
+        }
+    } catch {
+        // Fall back to comma-separated or single-value text
+    }
+
+    return trimmed
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean);
 }
 
 export async function GET() {
